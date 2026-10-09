@@ -4,13 +4,13 @@ export function Field({ label, htmlFor, error, children }: FieldProps) {
   const errorId = `${htmlFor}-error`;
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-gray-900">
+    <div className="flex flex-col gap-2">
+      <label htmlFor={htmlFor} className="text-[0.9375rem] font-semibold text-ink">
         {label}
       </label>
       {children}
       {error && (
-        <p id={errorId} role="alert" className="text-sm text-red-600">
+        <p id={errorId} role="alert" className="text-sm font-semibold text-danger">
           {error}
         </p>
       )}

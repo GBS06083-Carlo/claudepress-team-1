@@ -12,8 +12,10 @@ export function Input({
   placeholder,
   invalid,
 }: InputProps) {
-  const className = `w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 ${
-    invalid ? "border-red-500" : "border-zinc-300"
+  const className = `w-full rounded border bg-surface px-3 py-2.5 text-ink placeholder:text-muted/70 transition-colors focus:outline-none focus:ring-2 ${
+    invalid
+      ? "border-danger focus:ring-danger/30"
+      : "border-rule hover:border-muted focus:border-accent focus:ring-accent/25"
   }`;
 
   if (multiline) {
@@ -26,7 +28,7 @@ export function Input({
         placeholder={placeholder}
         aria-invalid={invalid}
         rows={8}
-        className={className}
+        className={`${className} font-serif text-lg leading-relaxed`}
       />
     );
   }
@@ -40,7 +42,7 @@ export function Input({
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
       aria-invalid={invalid}
-      className={className}
+      className={`${className} text-base`}
     />
   );
 }

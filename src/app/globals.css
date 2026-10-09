@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
+/*
+ * Identità visiva di ClaudePress.
+ * paper: carta fredda · ink: inchiostro · muted: grafite · rule: filo
+ * accent: ottanio · draft: ocra · danger: rosso
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f6f7f5;
+  --surface: #ffffff;
+  --ink: #1a1f2b;
+  --muted: #5b6270;
+  --rule: #d9dce1;
+  --accent: #0b6b6b;
+  --accent-strong: #08524f;
+  --on-accent: #ffffff;
+  --draft: #9a5f0e;
+  --danger: #b42318;
+  --danger-strong: #8f1c13;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #14171d;
+    --surface: #1b1f27;
+    --ink: #e8eaee;
+    --muted: #a0a7b4;
+    --rule: #2e333d;
+    --accent: #4fb8b2;
+    --accent-strong: #7dcdc8;
+    --on-accent: #0e1116;
+    --draft: #e0a246;
+    --danger: #f2766b;
+    --danger-strong: #f59a91;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-on-accent: var(--on-accent);
+  --color-draft: var(--draft);
+  --color-danger: var(--danger);
+  --color-danger-strong: var(--danger-strong);
+  --font-sans: var(--font-titillium), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
 }

@@ -3,11 +3,11 @@ import type { PostStatus, StatusBadgeProps } from "@/contracts/blog";
 const STATUS_STYLES: Record<PostStatus, { label: string; className: string }> = {
   draft: {
     label: "Bozza",
-    className: "bg-amber-100 text-amber-800",
+    className: "text-draft",
   },
   published: {
     label: "Pubblicato",
-    className: "bg-green-100 text-green-800",
+    className: "text-accent",
   },
 };
 
@@ -16,8 +16,9 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${className}`}
+      className={`inline-flex items-center gap-1.5 text-sm font-semibold ${className}`}
     >
+      <span aria-hidden="true" className="size-2 rounded-[1px] bg-current" />
       {label}
     </span>
   );

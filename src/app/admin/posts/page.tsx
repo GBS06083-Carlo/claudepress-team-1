@@ -1,11 +1,28 @@
 import Link from "next/link";
-import { API_ROUTES, ROUTES, apiUrl, type Post } from "@/contracts/blog";
+import {
+  API_ROUTES,
+  POST_STATUSES,
+  ROUTES,
+  apiUrl,
+  type Post,
+  type PostStatus,
+} from "@/contracts/blog";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DeletePostButton } from "@/app/admin/posts/_list/DeletePostButton";
 import { StatusToggle } from "@/app/admin/posts/_list/StatusToggle";
 
 const dateFormat = new Intl.DateTimeFormat("it-IT", { dateStyle: "medium" });
+
+const FILTERS: { label: string; status?: PostStatus }[] = [
+  { label: "Tutti" },
+  { label: "Bozze", status: "draft" },
+  { label: "Pubblicati", status: "published" },
+];
+
+function parseStatus(value: string | string[] | undefined): PostStatus | undefined {
+  return POST_STATUSES.find((status) => status === value);
+}
 
 async function loadPosts(): Promise<Post[] | null> {
   const res = await fetch(apiUrl(API_ROUTES.posts), { cache: "no-store" }).catch(() => null);
@@ -15,8 +32,14 @@ async function loadPosts(): Promise<Post[] | null> {
   return posts.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
-export default async function AdminPostsPage() {
-  const posts = await loadPosts();
+export default async function AdminPostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const activeStatus = parseStatus((await searchParams).status);
+  const allPosts = await loadPosts();
+  const posts = activeStatus ? allPosts?.filter((p) => p.status === activeStatus) : allPosts;
 
   if (!posts) {
     return (
@@ -39,10 +62,34 @@ export default async function AdminPostsPage() {
         </Link>
       </div>
 
+      <nav aria-label="Filtra per stato" className="mb-6 flex gap-5 border-b border-rule">
+        {FILTERS.map(({ label, status }) => {
+          const active = status === activeStatus;
+          return (
+            <Link
+              key={label}
+              href={status ? `${ROUTES.adminPosts}?status=${status}` : ROUTES.adminPosts}
+              aria-current={active ? "page" : undefined}
+              className={`-mb-px border-b-2 pb-2 text-[0.9375rem] font-semibold ${
+                active
+                  ? "border-accent text-ink"
+                  : "border-transparent text-muted hover:text-ink"
+              }`}
+            >
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
+
       {posts.length === 0 ? (
         <EmptyState
           title="Nessun post"
-          description="Non c'è ancora niente da mostrare. Crea il primo post con «Nuovo post»."
+          description={
+            activeStatus
+              ? "Nessun post corrisponde a questo filtro."
+              : "Non c'è ancora niente da mostrare. Crea il primo post con «Nuovo post»."
+          }
         />
       ) : (
         <div className="overflow-x-auto">
